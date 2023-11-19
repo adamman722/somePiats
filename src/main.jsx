@@ -4,6 +4,8 @@ import App from "./App.jsx";
 import "./index.css";
 import { Provider } from "react-redux";
 import { store } from "./redux/store.jsx";
+import { RouterProvider } from "react-router-dom";
+import { router } from "./router.jsx";
 
 /*
 For this challenge you will create a pokemon finder/randomizer, where you will call the pokeAPI to get the data.
@@ -20,7 +22,7 @@ For this app your user is requesting:
 ReactDOM.createRoot(document.getElementById("root")).render(
   <React.StrictMode>
     <Provider store={store}>
-      <App />
+      <RouterProvider router={router} />
     </Provider>
   </React.StrictMode>
 );
