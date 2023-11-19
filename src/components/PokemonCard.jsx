@@ -6,6 +6,7 @@ import CardContent from "@mui/material/CardContent";
 import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
 import TypeDisplay from "./TypeDisplay";
+import unKnown from "../assets/0201Unown.png";
 
 export default function PokemonCard({
   pokemon: { name, sprites, height, types, ...other },
@@ -20,7 +21,11 @@ export default function PokemonCard({
           <Typography sx={{ fontSize: 26 }} color="text.secondary" gutterBottom>
             {name[0].toUpperCase() + name.substring(1)}
           </Typography>
-          <img src={sprites.front_default} alt="" />
+          <img
+            src={sprites.front_default ? sprites.front_default : unKnown}
+            alt=""
+            style={{ height: "100px" }}
+          />
           <Typography variant="h5" component="div">
             Cheeseseseseseseseses
           </Typography>
