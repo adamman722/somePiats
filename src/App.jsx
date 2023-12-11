@@ -5,11 +5,13 @@ import { useLocalStorage } from "@uidotdev/usehooks";
 import { useGetPokemonByNameQuery } from "./redux/PokeDataQuery";
 import { setsPokemonNameList } from "./redux/allPokemonNamesSlice";
 import { useDispatch } from "react-redux";
+import { ThemeProvider, createTheme } from "@mui/material/styles";
+import CssBaseline from "@mui/material/CssBaseline";
 
 function App() {
   //Manage LocalStorage to help speed up time to use auto complete
   const [pokemonNames, savePokemonNames] = useLocalStorage("pNames", null);
-
+  const [darkMode, setDarkMode] = useState(false);
   //4 main calls that are going to be displayed if you do not have a team of at least 5 set already
   //TODO: need to make a function to display the pokemon if they are there
   useGetPokemonByNameQuery("metagross");
@@ -35,13 +37,26 @@ function App() {
     }
   }
 
+  const toggleDarkMode = () => {
+    setDarkMode(!darkMode);
+  };
+
+  const darkTheme = createTheme({
+    palette: {
+      mode: `${darkMode ? "dark" : "light"}`,
+    },
+  });
+
   useEffect(() => {
     checkAndSetPokemonNames();
   }, []);
 
   return (
     <>
-      <LandingPage />
+      <ThemeProvider theme={darkTheme}>
+        <CssBaseline />
+        <LandingPage toggleDarkMode={toggleDarkMode} />
+      </ThemeProvider>
     </>
   );
 }
