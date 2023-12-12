@@ -139,6 +139,8 @@ function LandingPage({ toggleDarkMode }) {
           </Grid>
         ) : null}
         {/* The outlet to about more pokemon goes here just need to rework some things */}
+      </Grid>
+      <Grid marginTop={2} container spacing={10}>
         {userSelecedPokemon.length !== 0 ? userSelecedPokemon : preLoadedPoke}
       </Grid>
       <Snackbar
