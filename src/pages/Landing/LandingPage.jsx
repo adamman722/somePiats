@@ -16,6 +16,9 @@ import Grid from "@mui/material/Grid";
 import Box from "@mui/material/Box";
 import TextField from "@mui/material/TextField";
 import Autocomplete from "@mui/material/Autocomplete";
+//UseHooks
+import { useLocalStorage } from "@uidotdev/usehooks";
+import { useNavigate } from "react-router-dom";
 
 function LandingPage({ toggleDarkMode }) {
   //Redux Slices
@@ -31,6 +34,8 @@ function LandingPage({ toggleDarkMode }) {
     vertical: "top",
     horizontal: "right",
   });
+  const navigate = useNavigate();
+  const [loggedIn, setLoggedIn] = useLocalStorage("loggedIn", null);
   const { vertical, horizontal, open } = snackState;
   const dispatch = useDispatch();
 
@@ -58,6 +63,10 @@ function LandingPage({ toggleDarkMode }) {
   }
 
   useEffect(() => {
+    if (!loggedIn) {
+      navigate("/");
+    }
+
     setPreLoadedPoke(() =>
       sliceData.map((pokemon, index) => {
         return (
@@ -134,6 +143,20 @@ function LandingPage({ toggleDarkMode }) {
                 onClick={() => toggleDarkMode()}
               >
                 Dark Mode?
+              </Button>
+              <Button
+                variant="outlined"
+                sx={{
+                  width: 150,
+                  backgroundColor: "red",
+                  fontWeight: "bold",
+                }}
+                onClick={() => {
+                  setLoggedIn("");
+                  navigate("/");
+                }}
+              >
+                Log out.
               </Button>
             </Stack>
           </Grid>

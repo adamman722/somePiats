@@ -7,13 +7,25 @@ import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
 import TypeDisplay from "./TypeDisplay";
 import unKnown from "../assets/0201Unown.png";
+import { useLocalStorage } from "@uidotdev/usehooks";
 
 export default function PokemonCard({
   pokemon: { name, sprites, height, types, ...other },
 }) {
-  //   console.log(name);
-  //   console.log(sprites.front_default);
-  console.log(types);
+  const [credentials, setUserCredentials] = useLocalStorage(
+    "credentials",
+    null
+  );
+  const [loggedIn, setLoggedIn] = useLocalStorage("loggedIn", null);
+
+  const addToTeam = () => {
+    const user = credentials.find((user) => user.id === loggedIn.id);
+    const allButUser = credentials.filter((user) => user.id !== loggedIn.id);
+    user.pokemonTeam.push({ name, sprites, height, types, ...other });
+
+    setUserCredentials([...allButUser, user]);
+  };
+
   return (
     <>
       <Card sx={{ minWidth: 275 }}>
@@ -40,6 +52,11 @@ export default function PokemonCard({
         </CardContent>
         <CardActions>
           <Button size="small">Learn More</Button>
+        </CardActions>
+        <CardActions>
+          <Button size="small" onClick={addToTeam}>
+            Add to team
+          </Button>
         </CardActions>
       </Card>
     </>

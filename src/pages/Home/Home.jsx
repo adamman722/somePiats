@@ -1,9 +1,11 @@
-import React from "react";
+import React, { useEffect } from "react";
 import Button from "@mui/material/Button";
 import { Box, Stack, TextField } from "@mui/material";
 import SignUpForm from "./SignUpForm/SignUpForm";
-import Typography from "@mui/material/Typography";
 import Modal from "@mui/material/Modal";
+import { useLocalStorage } from "@uidotdev/usehooks";
+import Snackbar from "@mui/material/Snackbar";
+import { useNavigate } from "react-router-dom";
 
 const style = {
   position: "absolute",
@@ -12,15 +14,40 @@ const style = {
   transform: "translate(-50%, -50%)",
   width: 300,
   bgcolor: "background.paper",
-  border: "2px solid #000",
   boxShadow: 24,
-  p: 4,
+  p: 2,
+  borderRadius: "10px",
 };
 
 function Home() {
+  const [credentials, setUserCredentials] = useLocalStorage(
+    "credentials",
+    null
+  );
+
+  const [loggedIn, setLoggedIn] = useLocalStorage("loggedIn", null);
   const [open, setOpen] = React.useState(false);
+  const [userAdded, setUserAdded] = React.useState(false);
+  const [userEmailInput, setUserEmailInput] = React.useState("");
+  const [userPasswordInput, setUserPasswordInput] = React.useState("");
+  const navigate = useNavigate();
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
+
+  const searchCredentials = () => {
+    console.log(credentials);
+    const foundUser = credentials.find(
+      (user) =>
+        user.email.toLowerCase() === userEmailInput.toLowerCase() &&
+        user.password == userPasswordInput
+    );
+
+    if (foundUser) {
+      setLoggedIn(foundUser);
+      navigate("/home");
+    }
+  };
+
   return (
     <Box minHeight={"95vh"}>
       <Stack
@@ -29,15 +56,25 @@ function Home() {
         alignItems="center"
         minHeight={"95vh"}
       >
-        <TextField placeholder="Email" type="email" label="Email"></TextField>
+        <TextField
+          placeholder="Email"
+          type="email"
+          label="Email"
+          onChange={(e) => setUserEmailInput(e.target.value)}
+        ></TextField>
         <TextField
           placeholder="Password"
           type="password"
           label="Password"
+          onChange={(e) => setUserPasswordInput(e.target.value)}
         ></TextField>
         <Box>
           <Stack spacing={1}>
-            <Button variant="contained" sx={{ width: "200px" }}>
+            <Button
+              variant="contained"
+              sx={{ width: "200px" }}
+              onClick={searchCredentials}
+            >
               Login
             </Button>
             <Button
@@ -58,9 +95,16 @@ function Home() {
         aria-describedby="modal-modal-description"
       >
         <Box sx={style}>
-          <SignUpForm handleClose={handleClose} />
+          <SignUpForm handleClose={handleClose} setUserAdded={setUserAdded} />
         </Box>
       </Modal>
+      <Snackbar
+        anchorOrigin={{ vertical: "top", horizontal: "center" }}
+        open={userAdded}
+        autoHideDuration={5000}
+        onClose={() => setUserAdded(false)}
+        message="User has been added son."
+      />
     </Box>
   );
 }
