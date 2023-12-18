@@ -8,6 +8,7 @@ import Typography from "@mui/material/Typography";
 import TypeDisplay from "./TypeDisplay";
 import unKnown from "../assets/0201Unown.png";
 import { useLocalStorage } from "@uidotdev/usehooks";
+import { Stack } from "@mui/material";
 
 export default function PokemonCard({
   pokemon: { name, sprites, height, types, ...other },
@@ -22,8 +23,17 @@ export default function PokemonCard({
     const user = credentials.find((user) => user.id === loggedIn.id);
     const allButUser = credentials.filter((user) => user.id !== loggedIn.id);
     user.pokemonTeam.push({ name, sprites, height, types, ...other });
-
     setUserCredentials([...allButUser, user]);
+  };
+  const removeFromTeam = () => {
+    //12/17 need to add the remove function
+    const user = credentials.find((user) => user.id === loggedIn.id);
+    user.pokemonTeam = user.pokemonTeam.filter(
+      (pokeeee) => pokeeee.name !== name
+    );
+    const allButUser = credentials.filter((user) => user.id !== loggedIn.id);
+    setUserCredentials([...allButUser, user]);
+    //works but I need to refresh the page once done
   };
 
   return (
@@ -38,26 +48,29 @@ export default function PokemonCard({
             alt=""
             style={{ height: "100px" }}
           />
-          <Typography variant="h5" component="div">
-            Cheeseseseseseseseses
-          </Typography>
           <Typography sx={{ mb: 1.5 }} color="text.secondary">
             <TypeDisplay types={types} />
           </Typography>
           <Typography variant="body2">
-            well meaning and kindly.
             <br />
             {'"a benevolent smile"'}
           </Typography>
         </CardContent>
-        <CardActions>
-          <Button size="small">Learn More</Button>
-        </CardActions>
-        <CardActions>
-          <Button size="small" onClick={addToTeam}>
-            Add to team
-          </Button>
-        </CardActions>
+        <Stack direction={"row"} justifyContent={"space-between"}>
+          <CardActions>
+            <Button size="small">Learn More</Button>
+          </CardActions>
+          <CardActions>
+            <Button size="small" onClick={removeFromTeam}>
+              Remove
+            </Button>
+          </CardActions>
+          <CardActions>
+            <Button size="small" onClick={addToTeam}>
+              Add to team
+            </Button>
+          </CardActions>
+        </Stack>
       </Card>
     </>
   );

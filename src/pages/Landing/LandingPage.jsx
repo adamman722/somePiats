@@ -34,11 +34,16 @@ function LandingPage({ toggleDarkMode }) {
     vertical: "top",
     horizontal: "right",
   });
-  const navigate = useNavigate();
+
+  //Locak storage
   const [loggedIn, setLoggedIn] = useLocalStorage("loggedIn", null);
+  const [credentials, setUserCredentials] = useLocalStorage(
+    "credentials",
+    null
+  );
   const { vertical, horizontal, open } = snackState;
   const dispatch = useDispatch();
-
+  const navigate = useNavigate();
   //Checking Themes
   const theme = useTheme();
   console.log(theme);
@@ -66,16 +71,27 @@ function LandingPage({ toggleDarkMode }) {
     if (!loggedIn) {
       navigate("/");
     }
-
-    setPreLoadedPoke(() =>
-      sliceData.map((pokemon, index) => {
-        return (
-          <Grid item xs={4} key={index}>
-            <PokemonCard pokemon={pokemon} key={index} />
-          </Grid>
-        );
-      })
-    );
+    const { pokemonTeam } = credentials.find((user) => user.id === loggedIn.id);
+    if (pokemonTeam) {
+      setPreLoadedPoke(() =>
+        pokemonTeam.map((pokemon, index) => {
+          return (
+            <Grid item xs={4} key={index}>
+              <PokemonCard pokemon={pokemon} key={index} />
+            </Grid>
+          );
+        })
+      );
+    } else
+      setPreLoadedPoke(() =>
+        sliceData.map((pokemon, index) => {
+          return (
+            <Grid item xs={4} key={index}>
+              <PokemonCard pokemon={pokemon} key={index} />
+            </Grid>
+          );
+        })
+      );
 
     setUserSelectedPokemon(() =>
       userSelecedPoke.userPokemon.map((pokeBoi, index) => (

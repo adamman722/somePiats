@@ -6,6 +6,7 @@ import { Provider } from "react-redux";
 import { store } from "./redux/store.jsx";
 import { RouterProvider } from "react-router-dom";
 import { router } from "./router.jsx";
+import { ThemeProvider, createTheme } from "@mui/material/styles";
 
 /*
 For this challenge you will create a pokemon finder/randomizer, where you will call the pokeAPI to get the data.
